@@ -1,43 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <title>Giftastic!</title>
 </head>
-<body>
-    <div id="buttons-div"></div>
-    <form id="button-add">
-        <label for="new-button">What do you want to see?</label>
-        <input type="text" id="new-button"><br>
 
-        <input id ="add-button" type="submit" value="Make a button!">
-    </form>
-    <div id="cool-gifs"></div>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm d-flex justify-content-between" id="buttons-div"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <form id="button-add">
+                        <label for="new-button">What do you want to see?</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="new-button"><br>
+                            <div class="input-group-append">
+                                <input class="btn btn-primary" id="add-button" type="submit" value="Make a button!">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm" id="cool-gifs"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm" id="request-more"></div>
+        </div>
+    </div>
 
     <script src="assets/javascript/gapp.js"></script>
     <script>
-        $(function() {
+        $(function () {
             gifApp.ShowButtons();
 
-            $("#buttons-div").on("click", ".gif-type", function(){
+            $("#buttons-div").on("click", ".gif-type", function () {
                 gifApp.GetStuff($(this).attr("data-name"));
             });
 
-            $("#add-button").on("click", function(event) {
+            $("#add-button").on("click", function (event) {
                 event.preventDefault();
                 gifApp.NewButton($("#new-button").val().trim());
                 $("#new-button").val("");
             });
 
-            $("#cool-gifs").on("click", ".gif-yo", function(){
+            $("#cool-gifs").on("click", ".gif-yo", function () {
                 gifApp.GifIt($(this).attr("id"));
             });
         });
     </script>
 </body>
+
 </html>

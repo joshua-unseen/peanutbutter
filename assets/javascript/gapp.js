@@ -12,7 +12,7 @@ var gifApp = {
         $("#buttons-div").empty();
         for (var i=0; i < this.topics.length; i++) {
             var thisButton = $("<button>", {
-                "class": "gif-type",
+                "class": "gif-type btn btn-primary m-1",
                 "data-name": this.topics[i],
                 "text": this.topics[i],
             });
@@ -35,13 +35,13 @@ var gifApp = {
             method: "GET",
             url: askGiphy,
         }).then(function(gotBack) {
-            console.log(gotBack);
+            // console.log(gotBack);
             gifApp.ShowStuff(gotBack.data);
         });
     },
 
     ShowStuff(theReturned) {
-        console.log(theReturned);
+        // console.log(theReturned);
         
         for(var i =0; i < theReturned.length; i++) {
             var rating = theReturned[i].rating;
@@ -57,9 +57,15 @@ var gifApp = {
             });
             var thisGIFDiv = $("<div class=\"single-gif\">").html("<p>Rating: "+ rating +"</p>");
             thisGIFDiv.prepend(thisGIF);
-            thisGIFDiv.appendTo(this.$gifDiv);  // Okay, now I'm just being intentionally confusing.  Guess it's one of those days.
+            thisGIFDiv.appendTo(this.$gifDiv);  // I swear I'm not being intentionally confusing.  Guess it's just one of those days.
         }
+        var moreBtn = $("<button id=\"more-stuff\">").addClass("btn btn-primary m-1").text("Moar Plz!");
+        $("#request-more").append(moreBtn);
+        moreBtn.click( function() {
+            GetMoreStuff();
+        });
     },
+    GetMoreStuff() {},
 
     GifIt(clicky) {
         // Switches the GIFs from still to animating and back on click.
