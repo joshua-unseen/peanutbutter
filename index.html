@@ -47,7 +47,7 @@
             gifApp.ShowButtons();
 
             $("#buttons-div").on("click", ".gif-type", function () {
-                gifApp.GetStuff($(this).attr("data-name"));
+                gifApp.BuildURL($(this).attr("data-name"));
             });
 
             $("#add-button").on("click", function (event) {
@@ -59,6 +59,9 @@
             $("#cool-gifs").on("click", ".gif-yo", function () {
                 gifApp.GifIt($(this).attr("id"));
             });
+            $("#request-more").on("click", "#more-stuff", function () {
+            gifApp.BuildMoreURL();
+        });
         });
     </script>
 </body>

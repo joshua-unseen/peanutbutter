@@ -1,16 +1,20 @@
 var gifApp = {
-    
-    topics:  [
+
+    topics: [
         "robots",
         "spaceships",
         "lasers",
         "aliens",
     ],
+    // I don't care about the key or the search term as an object parameter, but I'll need to reference this in more than one function
+    askGiphy: "",
     $gifDiv: $("#cool-gifs"),
-    
+    page: 0,
+    moreBtn: $("<button id=\"more-stuff\">").addClass("btn btn-primary m-1").text("Moar Plz!"),
+
     ShowButtons() {
         $("#buttons-div").empty();
-        for (var i=0; i < this.topics.length; i++) {
+        for (var i = 0; i < this.topics.length; i++) {
             var thisButton = $("<button>", {
                 "class": "gif-type btn btn-primary m-1",
                 "data-name": this.topics[i],
@@ -20,52 +24,56 @@ var gifApp = {
         }
     },
 
-    GetStuff(clicky) {
-        // Doesn't seem to be any reason to make any of this an object parameter (yet.)
+    BuildURL(clicky) {
         // API key:
         var giphKey = "L7sLjq7qhLWoX1aiVK9wk6ZKhHVHbQPr";
         // Set the search term:
         var searchTerm = clicky;
         // Request URL:
-        var askGiphy =  "https://api.giphy.com/v1/gifs/search?q="
+        this.askGiphy = "https://api.giphy.com/v1/gifs/search?q="
             + searchTerm + "&limit=10&rating=pg&api_key="
             + giphKey;
-            this.$gifDiv.empty();
+        this.$gifDiv.empty();
+        this.page = 0;
+        this.GetStuff(this.askGiphy);
+    },
+    GetStuff(reqURL) {
         $.ajax({
             method: "GET",
-            url: askGiphy,
-        }).then(function(gotBack) {
+            url: reqURL,
+        }).then(function (gotBack) {
             // console.log(gotBack);
             gifApp.ShowStuff(gotBack.data);
         });
     },
-
     ShowStuff(theReturned) {
-        // console.log(theReturned);
-        
-        for(var i =0; i < theReturned.length; i++) {
+        console.log(theReturned);
+
+        for (var i = 0; i < theReturned.length; i++) {
             var rating = theReturned[i].rating;
             var stillURL = theReturned[i].images.fixed_height_still.url;
             var animURL = theReturned[i].images.fixed_height.url;
             var thisGIF = $("<img>", {
-                "id": i + "gif",
-                "class": "gif-yo",
+                "id": i + this.page + "gif",
+                "class": "gif-yo card-img",
                 "src": stillURL,
                 "data-still": stillURL,
                 "data-move": animURL,
                 "data-state": "frozen",
             });
-            var thisGIFDiv = $("<div class=\"single-gif\">").html("<p>Rating: "+ rating +"</p>");
+            var thisGIFDiv = $("<div>")
+                .addClass("single-gif card")
+                .html("<div class=\"card-footer\">Rating: " + rating + "</div>");
             thisGIFDiv.prepend(thisGIF);
             thisGIFDiv.appendTo(this.$gifDiv);  // I swear I'm not being intentionally confusing.  Guess it's just one of those days.
         }
-        var moreBtn = $("<button id=\"more-stuff\">").addClass("btn btn-primary m-1").text("Moar Plz!");
-        $("#request-more").append(moreBtn);
-        moreBtn.click( function() {
-            GetMoreStuff();
-        });
+        $("#request-more").append(this.moreBtn);
     },
-    GetMoreStuff() {},
+    BuildMoreURL() {
+        this.page += 10;
+        var moreURL = this.askGiphy + "&offset=" + this.page;
+        this.GetStuff(moreURL);
+    },
 
     GifIt(clicky) {
         // Switches the GIFs from still to animating and back on click.
@@ -78,7 +86,7 @@ var gifApp = {
                 thisGIF.attr("src", moving);
                 thisGIF.attr("data-state", "moving")
                 break;
-                case "moving":
+            case "moving":
                 thisGIF.attr("src", frozen);
                 thisGIF.attr("data-state", "frozen")
                 break;
@@ -89,7 +97,7 @@ var gifApp = {
 
     NewButton(category) {
         console.log(category);
-        
+
         this.topics.push(category);
         this.ShowButtons();
     },
